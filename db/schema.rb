@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829041708) do
+ActiveRecord::Schema.define(version: 20170830223912) do
 
   create_table "batches", force: :cascade do |t|
     t.integer "sackAmount"
@@ -42,6 +42,12 @@ ActiveRecord::Schema.define(version: 20170829041708) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_entry_controls_on_organization_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.boolean "read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "organizations", force: :cascade do |t|

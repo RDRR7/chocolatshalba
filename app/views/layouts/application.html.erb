@@ -26,7 +26,14 @@
             <li><a class="white-text">Bodega</a></li>
             <li><%= link_to 'Control de ingreso', organizations_path, class:"white-text li-back"%></li>
             <li><%= link_to 'Inventario', '#', class:"white-text li-back"%></li>
-            <li><%= link_to 'Movimiento de lotes', '#', class:"white-text li-back"%></li>
+            <li><%= link_to 'Movimiento de lotes', '#', class:"white-text li-back"%>
+                <% if Notification.count == 1%>
+                    <span class="new badge" data-badge-caption="nuevo">1</span></li>
+                <% elsif  Notification.count > 1 %>
+                    <span class="new badge" data-badge-caption="nuevos"><%=	Notification.count %></span></li>
+                <% end %>
+            </li>    
+            <li><%= link_to 'Control de Calidad', quality_controls_index_path, class:"white-text li-back"%></li>
           <% end %>
         </ul>      
     </header>
