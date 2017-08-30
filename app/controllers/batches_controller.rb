@@ -20,7 +20,7 @@ class BatchesController < ApplicationController
   end
 
   private
-  def batches_params
-    params.require(:batch).permit(:sackAmount, :weight, :enterCode, :cocoaType, :geneticMaterial)
-  end  
+    def batches_params
+      params.require(:batch).permit(:sackAmount, :weight, :enterCode, :cocoaType, :geneticMaterial)
+    end
 end

@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'quality_controls/index'
+
+  get 'notifications/index'
+
+  resources :quality_controls
+
   resources :entry_controls do
     resources :batches
   end
