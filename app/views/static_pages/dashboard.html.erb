@@ -1,11 +1,196 @@
 <div class="container">
   <div class="row">
       <div class="col m12">
+        <% if current_user.warehouse_role || current_user.admin_role %>
         <div class="card-panel">
-          <h1 class="welcome">BIENVENIDO</h1>
-          <h2>Al sistema de trazabilidad de Chocolats Halba</h2>
-          <center><%= image_tag("flow.png")%></center>
+          <div class="page-header">
+            <h1>BODEGA</h1>
+          </div>
+          <table class="striped">
+            <thead>
+            <tr>
+              <th>Cantidad de sacos</th>
+              <th>Peso</th>
+              <th>Codigo de identificación</th>
+              <th>Tipo de cacao</th>
+              <th>Material genético</th>
+              <th>Fair Trade</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @batches.each do |batch| %>
+                <tr>
+                  <td><%= batch.sackAmount %></td>
+                  <td><%=number_with_precision(batch.weight, precision: 2) %> lb</td>
+                  <td><%= batch.enterCode %></td>
+                  <td><%= CocoaType.find(batch.cocoaType).name %></td>
+                  <td><%= GeneticMaterial.find(batch.geneticMaterial).name %></td>
+                  <% if batch.ft %>
+                      <td>Si</td>
+                  <% else %>
+                      <td>No</td>
+                  <% end %>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
         </div>
+        <% end %>
+        <% if current_user.quality_manager_role || current_user.admin_role %>
+        <div class="card-panel">
+          <div class="page-header">
+            <h1>LOTES A REVISAR</h1>
+          </div>
+          <table>
+            <thead>
+            <tr>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Genética</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @batches.each do |batch|%>
+                <% if not batch.quality_control.nil? %>
+                    <% if  batch.quality_control.revision.nil? %>
+                        <tr>
+                          <td><%=	batch.enterCode %></td>
+                          <td><%= CocoaType.find(batch.cocoaType).name %></td>
+                          <td><%= GeneticMaterial.find(batch.geneticMaterial).name %></td>
+                        </tr>
+                    <% end %>
+                <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <% end %>
+        <% if current_user.quality_role|| current_user.admin_role %>
+        <div class="card-panel">
+          <div class="page-header">
+            <h1>LOTES A ANALIZAR</h1>
+          </div>
+          <table>
+            <thead>
+            <tr>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Genética</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @batches.each do |batch|%>
+                <% if batch.quality_control.nil? %>
+                    <tr>
+                      <td><%=	batch.enterCode %></td>
+                      <td><%= CocoaType.find(batch.cocoaType).name %></td>
+                      <td><%= GeneticMaterial.find(batch.geneticMaterial).name %></td>
+                    </tr>
+                <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <% end %>
+        <% if current_user.administration_role || current_user.admin_role %>
+        <div class="card-panel">
+          <div class="page-header">
+            <h1>ADMINISTRACION</h1>
+          </div>
+          <table class="striped">
+            <thead>
+            <tr>
+              <th>Codigo de identificación</th>
+              <th>Tipo de cacao</th>
+              <th>Material genético</th>
+              <th>Fair Trade</th>
+              <th>Fase</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @batches.each do |batch| %>
+                <tr>
+                  <td><%= batch.enterCode %></td>
+                  <td><%= CocoaType.find(batch.cocoaType).name %></td>
+                  <td><%= GeneticMaterial.find(batch.geneticMaterial).name %></td>
+                  <% if batch.ft %>
+                      <td>Si</td>
+                  <% else %>
+                      <td>No</td>
+                  <% end %>
+                  <% if  batch.quality_control == nil %>
+                      <td>Analisis de Calidad</td>
+                  <% elsif  batch.review == 1 %>
+                      <td>Certificado</td>
+                  <% elsif batch.quality_control.revision == nil %>
+                      <td>Jefe de Calidad</td>
+                  <% elsif batch.buy == 1 and batch.purchase == nil %>
+                      <td>Compras</td>
+                  <% end %>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <% end %>
+        <% if current_user.purchase_role || current_user.admin_role %>
+        <div class="card-panel">
+          <div class="page-header">
+            <h1>LOTES POR COMPRAR</h1>
+          </div>
+          <table class="striped">
+            <thead>
+            <tr>
+              <th>Lote</th>
+              <th>Control de Ingreso</th>
+              <th>Organización</th>
+              <th>Fecha de Ingreso</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @batches.each do |batch| %>
+                <% if batch.buy == 1 and batch.purchase == nil%>
+                    <tr>
+                      <td><%= batch.enterCode %></td>
+                      <td><%=	batch.entry_control.entry_number %></td>
+                      <td><%=	batch.entry_control.organization.name %></td>
+                      <td><%=	batch.entry_control.entryDate %></td>
+                    </tr>
+                <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <% end %>
+        <% if current_user.certification_role || current_user.admin_role %>
+        <div class="card-panel">
+          <div class="page-header">
+            <h1>CHEQUEOS PENDIENTES</h1>
+          </div>
+          <table class="striped">
+            <thead>
+            <tr>
+              <th>Lote</th>
+              <th>Control de Ingreso</th>
+              <th>Organización</th>
+              <th>Fecha de Ingreso</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @batches.each do |batch| %>
+                <% if batch.review == 1 %>
+                    <tr>
+                      <td><%= batch.enterCode %></td>
+                      <td><%=	batch.entry_control.entry_number %></td>
+                      <td><%=	batch.entry_control.organization.name %></td>
+                      <td><%=	batch.entry_control.entryDate %></td>
+                    </tr>
+                <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <% end %>
       </div>
   </div>
 </div>
