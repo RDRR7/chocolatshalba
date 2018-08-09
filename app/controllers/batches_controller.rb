@@ -2,15 +2,18 @@ class BatchesController < ApplicationController
   before_action :authenticate_user!
   def new
     @cocoa = CocoaType.all
+    @certificate = CertificateType.all
     @genetic = GeneticMaterial.all
   	@entryControl = EntryControl.find(params[:entry_control_id])
-  	@batch=@entryControl.batches.build
+    @batch=@entryControl.batches.build
   end
+  
+
 
   def create
     entryControl = EntryControl.find(params[:entry_control_id])
     batch=entryControl.batches.build(batches_params)
-
+    batch.enterCode= "k"
     if batch.save
         createNotification
         redirect_to entryControl
@@ -21,9 +24,11 @@ class BatchesController < ApplicationController
 
   def edit
     @batch=Batch.find(params[:id])
+    
   end
 
   def update
+    
     batch=Batch.find(params[:id])
     if batch.update(batches_params)
       redirect_to batch.entry_control
@@ -52,7 +57,7 @@ class BatchesController < ApplicationController
 
   private
   def batches_params
-    params.require(:batch).permit(:sackAmount, :weight, :enterCode, :cocoaType, :geneticMaterial, :ft)
+    params.require(:batch).permit(:sackAmount, :weight, :enterCode, :certificatetype, :postharvestCenter, :cocoaType, :geneticMaterial, :ft, :samples)
   end
 
   def createNotification
