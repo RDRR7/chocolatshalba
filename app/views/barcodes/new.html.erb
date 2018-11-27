@@ -1,0 +1,21 @@
+  <div class="container">
+    <div class="row">
+      <div class="col m12">
+        <div class="card">
+          <div class="card-content">
+            <div class="page-header">
+              <h1>Código de Barra</h1>
+            </div><p></p>
+            <div>
+              
+              <%= image_tag(url_for({:controller => 'barcodes', :action => 'new', :format => 'png' }) ) %>
+              <p><%=@batch.enterCode%></p>
+            </div>
+          </div>
+          <div class="card-content">
+            <%= link_to "Regresar", @batch.entry_control , class: "btn btn-primary"%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

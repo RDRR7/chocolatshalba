@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212223913) do
+ActiveRecord::Schema.define(version: 20181106230947) do
 
   create_table "acceptances", force: :cascade do |t|
     t.decimal "max_qualityA"
@@ -45,6 +45,15 @@ ActiveRecord::Schema.define(version: 20171212223913) do
     t.integer "export_batch_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "certificatetype"
+    t.integer "postharvestCenter"
+    t.integer "entrySheetNumber"
+    t.integer "organizationId"
+    t.string "receivedBy"
+    t.string "deliveredBy"
+    t.integer "samples"
+    t.integer "beans"
+    t.string "state"
     t.index ["entry_control_id"], name: "index_batches_on_entry_control_id"
   end
 
@@ -76,6 +85,12 @@ ActiveRecord::Schema.define(version: 20171212223913) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["batch_id"], name: "index_certificate_checks_on_batch_id"
+  end
+
+  create_table "certificate_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "checkings", force: :cascade do |t|
@@ -131,6 +146,21 @@ ActiveRecord::Schema.define(version: 20171212223913) do
   create_table "export_batches", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "filechecklists", force: :cascade do |t|
+    t.boolean "referralSheet"
+    t.boolean "producersList"
+    t.boolean "inspectionSheet"
+    t.boolean "embacingControl"
+    t.boolean "collectionCleaningControl"
+    t.boolean "warehouseEntrySheet"
+    t.integer "entry_control_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "everything"
+    t.boolean "billCopy"
+    t.index ["entry_control_id"], name: "index_filechecklists_on_entry_control_id"
   end
 
   create_table "genetic_materials", force: :cascade do |t|
@@ -228,7 +258,16 @@ ActiveRecord::Schema.define(version: 20171212223913) do
     t.integer "batch_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "samples"
     t.index ["batch_id"], name: "index_sensory_analyses_on_batch_id"
+  end
+
+  create_table "sequences", force: :cascade do |t|
+    t.integer "number"
+    t.integer "year"
+    t.integer "day"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

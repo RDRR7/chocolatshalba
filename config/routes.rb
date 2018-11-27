@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
 
+  get 'inventories/index'
+
   get 'export_batches/join'
 
   get 'export_batches/new'
 
-  get 'reports/index'
+  get 'reports/index'#
+  get 'inventories/index'#
 
   get 'purchases/index'
 
@@ -22,6 +25,8 @@ Rails.application.routes.draw do
 
   put 'batches/:id(.:format)', to: 'batches#move_batch'
 
+  get 'sequence', to: 'sequences#create'
+
   resources :sensory_analyses
   resources :quality_controls
   resources :revisions
@@ -32,13 +37,21 @@ Rails.application.routes.draw do
   resources :certificate_checks
   resources :purchases
   resources :reports
+  resources :inventories
   resources :static_pages
   resources :export_batches
   resources :documents
+  resources :filechecklists
+  resources :barcodes
+
+
+  resources :sequences
 
   resources :entry_controls do
     resources :batches
     resources :reports
+    resources :barcodes
+    resources :inventories
   end
 
   resources :batches do
@@ -48,6 +61,7 @@ Rails.application.routes.draw do
     resources :purchases
     resources :sensory_analyses
     resources :reports
+    resources :barcodes
   end
 
   resources :quality_controls do
@@ -60,6 +74,7 @@ Rails.application.routes.draw do
 
   resources :entry_controls do
     resources :documents, only: [:new, :create]
+    resources :filechecklists, only: [:new, :create]
   end
 
   resources :invoices do
