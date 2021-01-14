@@ -59,7 +59,7 @@ end
   gem 'devise'
   gem 'jquery-rails'
   gem 'materialize-sass'
-  gem 'rails_admin', '~> 1.2'
+  gem 'rails_admin', '~> 1.4'
   gem 'cancancan'
   gem "paperclip"
   gem 'rails_admin_rollincode', '~> 1.0'
